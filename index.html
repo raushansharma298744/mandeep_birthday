@@ -8,11 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: #0f0b1a;
@@ -22,221 +18,79 @@
       overflow-x: hidden;
       line-height: 1.5;
     }
-    .app {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 1.2rem 1.5rem 4rem;
-      position: relative;
-    }
+    .app { max-width: 1100px; margin: 0 auto; padding: 1.2rem 1.5rem 4rem; position: relative; }
     .progress-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.4rem;
-      background: rgba(255, 215, 0, 0.05);
-      backdrop-filter: blur(8px);
-      padding: 0.6rem 1.2rem;
-      border-radius: 60px;
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
+      background: rgba(255, 215, 0, 0.05); backdrop-filter: blur(8px);
+      padding: 0.6rem 1.2rem; border-radius: 60px;
+      border: 1px solid rgba(255, 215, 0, 0.15); margin-bottom: 2.5rem; flex-wrap: wrap;
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
     }
-    .progress-label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.3px;
-      color: #ffd966;
-    }
-    .progress-dots {
-      display: flex;
-      gap: 0.6rem;
-      align-items: center;
-      flex: 1;
-      justify-content: center;
-    }
+    .progress-label { font-weight: 600; font-size: 0.85rem; letter-spacing: 0.3px; color: #ffd966; }
+    .progress-dots { display: flex; gap: 0.6rem; align-items: center; flex: 1; justify-content: center; }
     .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 20px;
-      background: #3a2a5c;
-      transition: 0.4s ease;
-      border: 1px solid rgba(255, 215, 0, 0.1);
+      width: 12px; height: 12px; border-radius: 20px; background: #3a2a5c;
+      transition: 0.4s ease; border: 1px solid rgba(255, 215, 0, 0.1);
     }
-    .dot.active {
-      background: #ffb347;
-      box-shadow: 0 0 20px #ffb347, 0 0 40px #ff8c00;
-      width: 28px;
-      border-color: #ffb347;
-    }
-    .dot.done {
-      background: #ff8c00;
-      box-shadow: 0 0 15px #ff8c00;
-    }
-    .step-name {
-      font-size: 0.7rem;
-      color: #ffd966;
-      font-weight: 500;
-      display: none;
-    }
-    @media (min-width: 600px) {
-      .step-name { display: inline-block; }
-    }
-    .section {
-      display: none;
-      animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      margin-top: 1rem;
-    }
-    .section.active {
-      display: block;
-    }
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(40px) scale(0.96); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
+    .dot.active { background: #ffb347; box-shadow: 0 0 20px #ffb347, 0 0 40px #ff8c00; width: 28px; border-color: #ffb347; }
+    .dot.done { background: #ff8c00; box-shadow: 0 0 15px #ff8c00; }
+    .step-name { font-size: 0.7rem; color: #ffd966; font-weight: 500; display: none; }
+    @media (min-width: 600px) { .step-name { display: inline-block; } }
+    .section { display: none; animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; margin-top: 1rem; }
+    .section.active { display: block; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(40px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
     .glass {
-      background: rgba(255, 215, 0, 0.03);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 215, 0, 0.08);
-      border-radius: 2.5rem;
-      padding: 2rem 2rem;
+      background: rgba(255, 215, 0, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 215, 0, 0.08); border-radius: 2.5rem; padding: 2rem 2rem;
       box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 215, 0, 0.03);
-      transition: 0.2s;
-      position: relative;
-      overflow: hidden;
+      transition: 0.2s; position: relative; overflow: hidden;
     }
     .glass::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
       background: radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.03), transparent 60%);
       pointer-events: none;
     }
     .btn-primary {
-      background: linear-gradient(135deg, #ff8c00, #ffb347);
-      border: none;
-      color: #0f0b1a;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.9rem 2.2rem;
-      border-radius: 60px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      box-shadow: 0 6px 25px rgba(255, 140, 0, 0.4);
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      position: relative;
-      z-index: 2;
+      background: linear-gradient(135deg, #ff8c00, #ffb347); border: none; color: #0f0b1a;
+      font-weight: 700; font-size: 1.1rem; padding: 0.9rem 2.2rem; border-radius: 60px;
+      cursor: pointer; transition: 0.25s ease; box-shadow: 0 6px 25px rgba(255, 140, 0, 0.4);
+      letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 0.5rem; position: relative; z-index: 2;
     }
-    .btn-primary:hover {
-      transform: scale(1.05) translateY(-2px);
-      box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6);
-    }
+    .btn-primary:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6); }
     .welcome-title {
-      font-size: clamp(2.8rem, 10vw, 4.8rem);
-      font-weight: 700;
+      font-size: clamp(2.8rem, 10vw, 4.8rem); font-weight: 700;
       background: linear-gradient(135deg, #ffd966, #ff8c00, #ffb347);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-      text-shadow: 0 0 60px rgba(255, 140, 0, 0.2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.1; text-shadow: 0 0 60px rgba(255, 140, 0, 0.2);
     }
-    .floating-particles {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: -1;
-      overflow: hidden;
-    }
+    .floating-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; overflow: hidden; }
     .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, #ffb347, #ff8c00);
-      opacity: 0.15;
-      animation: floatUp linear infinite;
+      position: absolute; border-radius: 50%; background: radial-gradient(circle, #ffb347, #ff8c00);
+      opacity: 0.15; animation: floatUp linear infinite;
     }
     @keyframes floatUp {
       0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.15; }
-      90% { opacity: 0.15; }
+      10% { opacity: 0.15; } 90% { opacity: 0.15; }
       100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
     }
     .quiz-option {
-      display: block;
-      width: 100%;
-      padding: 0.9rem 1.5rem;
-      margin: 0.6rem 0;
-      background: rgba(255, 215, 0, 0.03);
-      border: 1px solid rgba(255, 215, 0, 0.06);
-      border-radius: 40px;
-      color: #f0e8ff;
-      font-size: 1rem;
-      text-align: left;
-      cursor: pointer;
-      transition: 0.2s;
-      position: relative;
-      z-index: 2;
+      display: block; width: 100%; padding: 0.9rem 1.5rem; margin: 0.6rem 0;
+      background: rgba(255, 215, 0, 0.03); border: 1px solid rgba(255, 215, 0, 0.06);
+      border-radius: 40px; color: #f0e8ff; font-size: 1rem; text-align: left;
+      cursor: pointer; transition: 0.2s; position: relative; z-index: 2;
     }
-    .quiz-option:hover {
-      background: rgba(255, 140, 0, 0.15);
-      border-color: #ff8c00;
-      transform: translateX(5px);
-    }
-    .quiz-option.selected {
-      background: rgba(255, 140, 0, 0.2);
-      border-color: #ffb347;
-      box-shadow: 0 0 30px rgba(255, 140, 0, 0.15);
-    }
-    .rating-slider {
-      width: 100%;
-      accent-color: #ff8c00;
-      height: 8px;
-      border-radius: 10px;
-      margin: 1.5rem 0;
-      background: linear-gradient(to right, #ff8c00, #ffb347);
-    }
-    .rating-value {
-      font-size: 3.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ffd966, #ff8c00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .final-reveal {
-      text-align: center;
-      padding: 2.5rem 1rem;
-      position: relative;
-    }
+    .quiz-option:hover { background: rgba(255, 140, 0, 0.15); border-color: #ff8c00; transform: translateX(5px); }
+    .quiz-option.selected { background: rgba(255, 140, 0, 0.2); border-color: #ffb347; box-shadow: 0 0 30px rgba(255, 140, 0, 0.15); }
+    .rating-slider { width: 100%; accent-color: #ff8c00; height: 8px; border-radius: 10px; margin: 1.5rem 0; background: linear-gradient(to right, #ff8c00, #ffb347); }
+    .rating-value { font-size: 3.5rem; font-weight: 700; background: linear-gradient(135deg, #ffd966, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .final-reveal { text-align: center; padding: 2.5rem 1rem; position: relative; }
     .final-reveal .glow-ring {
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      top: -50%;
-      left: -50%;
+      position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
       background: radial-gradient(circle, rgba(255, 140, 0, 0.05), transparent 70%);
-      pointer-events: none;
-      animation: pulseGlow 3s infinite;
+      pointer-events: none; animation: pulseGlow 3s infinite;
     }
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.1); opacity: 1; }
-    }
-    .confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
+    @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+    .confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
     /* ===== PHOTO GALLERY ===== */
     .photo-grid {
@@ -252,7 +106,7 @@
       box-shadow: 0 12px 28px -8px rgba(0,0,0,0.6);
       transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
       transform: rotate(var(--rot, 0deg));
-      background: rgba(20, 15, 40, 0.5);
+      background: #1a1528;
       border: 2px solid rgba(255, 215, 0, 0.08);
     }
     .photo-placeholder img {
@@ -274,78 +128,42 @@
     .photo-placeholder:nth-child(6) { --rot: 1.5deg; }
 
     .friendship-quote {
-      font-size: 1.1rem;
-      font-style: italic;
-      color: #ffd966;
-      border-left: 4px solid #ff8c00;
-      padding-left: 1.4rem;
-      margin: 2rem 0 1.5rem;
-      background: rgba(255, 215, 0, 0.02);
-      border-radius: 0 20px 20px 0;
-      padding: 1.2rem 1.8rem;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 0 30px rgba(255, 140, 0, 0.03);
+      font-size: 1.1rem; font-style: italic; color: #ffd966;
+      border-left: 4px solid #ff8c00; padding-left: 1.4rem;
+      margin: 2rem 0 1.5rem; background: rgba(255, 215, 0, 0.02);
+      border-radius: 0 20px 20px 0; padding: 1.2rem 1.8rem;
+      backdrop-filter: blur(4px); box-shadow: 0 0 30px rgba(255, 140, 0, 0.03);
     }
     .heartfelt-message {
-      background: rgba(255, 215, 0, 0.02);
-      padding: 1.8rem 2rem;
-      border-radius: 40px;
-      border: 1px solid rgba(255, 215, 0, 0.05);
-      line-height: 1.8;
-      color: #f0e8ff;
+      background: rgba(255, 215, 0, 0.02); padding: 1.8rem 2rem;
+      border-radius: 40px; border: 1px solid rgba(255, 215, 0, 0.05);
+      line-height: 1.8; color: #f0e8ff;
     }
-    .heartfelt-message p {
-      margin-bottom: 0.8rem;
-    }
+    .heartfelt-message p { margin-bottom: 0.8rem; }
     .music-btn {
-      position: fixed;
-      bottom: 20px; right: 20px;
-      background: rgba(20, 15, 40, 0.8);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 215, 0, 0.1);
-      border-radius: 60px;
-      padding: 0.5rem 1.2rem;
-      color: #ffd966;
-      font-size: 0.9rem;
-      z-index: 100;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(20, 15, 40, 0.8); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 215, 0, 0.1); border-radius: 60px;
+      padding: 0.5rem 1.2rem; color: #ffd966; font-size: 0.9rem;
+      z-index: 100; cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
       transition: 0.2s;
     }
-    .music-btn:hover {
-      border-color: #ff8c00;
-      box-shadow: 0 0 30px rgba(255, 140, 0, 0.1);
-    }
+    .music-btn:hover { border-color: #ff8c00; box-shadow: 0 0 30px rgba(255, 140, 0, 0.1); }
     @media (max-width: 480px) {
       .app { padding: 1rem 0.8rem; }
       .glass { padding: 1.5rem 1rem; }
       .photo-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (min-width: 800px) {
-      .photo-grid { grid-template-columns: repeat(3, 1fr); }
-    }
+    @media (min-width: 800px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
     .hidden { display: none !important; }
     .mt-2 { margin-top: 1.8rem; }
     .text-center { text-align: center; }
     .badge-glow {
-      display: inline-block;
-      padding: 0.2rem 1rem;
-      border-radius: 40px;
-      background: rgba(255, 140, 0, 0.1);
-      border: 1px solid rgba(255, 140, 0, 0.2);
-      font-size: 0.7rem;
-      color: #ffb347;
-      letter-spacing: 0.5px;
+      display: inline-block; padding: 0.2rem 1rem; border-radius: 40px;
+      background: rgba(255, 140, 0, 0.1); border: 1px solid rgba(255, 140, 0, 0.2);
+      font-size: 0.7rem; color: #ffb347; letter-spacing: 0.5px;
     }
-    .signature {
-      font-size: 0.9rem;
-      color: #ffb347;
-      opacity: 0.7;
-      margin-top: 1rem;
-      font-style: italic;
-    }
+    .signature { font-size: 0.9rem; color: #ffb347; opacity: 0.7; margin-top: 1rem; font-style: italic; }
   </style>
 </head>
 <body>
@@ -422,35 +240,33 @@
       
       <!-- ===== PHOTO GALLERY ===== -->
       <!-- 
-        ⚠️ IMPORTANT: 
-        Put your images in the SAME FOLDER as index.html
-        Name them: image1.jpg, image2.jpg, image3.jpg, image4.jpg, image5.jpg, image6.jpg
-        Or change the src="..." to your actual file names
+        📸 Your photos are in the "photos" folder with these names:
+        img1.jpeg, img2.jpeg, img3.jpeg, img4.jpeg, img5.jpeg, img6.jpeg
       -->
       <div class="photo-grid">
-        <!-- PHOTO 1 -->
+        <!-- PHOTO 1: Mandeep and Raushan -->
         <div class="photo-placeholder">
-          <img src="image1.jpg" alt="Mandeep and Raushan">
+          <img src="photos/img1.jpeg" alt="Mandeep and Raushan">
         </div>
-        <!-- PHOTO 2 -->
+        <!-- PHOTO 2: Fun moment -->
         <div class="photo-placeholder">
-          <img src="image2.jpg" alt="Fun moment">
+          <img src="photos/img2.jpg" alt="Fun moment">
         </div>
-        <!-- PHOTO 3 -->
+        <!-- PHOTO 3: Good times -->
         <div class="photo-placeholder">
-          <img src="image3.jpg" alt="Good times">
+          <img src="photos/img3.jpeg" alt="Good times">
         </div>
-        <!-- PHOTO 4 -->
+        <!-- PHOTO 4: Another memory -->
         <div class="photo-placeholder">
-          <img src="image4.jpg" alt="Another memory">
+          <img src="photos/img4.jpeg" alt="Another memory">
         </div>
-        <!-- PHOTO 5 -->
+        <!-- PHOTO 5: Crazy moment -->
         <div class="photo-placeholder">
-          <img src="image5.jpg" alt="Crazy moment">
+          <img src="photos/img5.jpeg" alt="Crazy moment">
         </div>
-        <!-- PHOTO 6 -->
+        <!-- PHOTO 6: Best friends -->
         <div class="photo-placeholder">
-          <img src="image6.jpg" alt="Best friends">
+          <img src="photos/img6.jpg" alt="Best friends">
         </div>
       </div>
 
