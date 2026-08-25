@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>Mandeep · Birthday Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0b1a;
+      background-image: radial-gradient(circle at 10% 20%, #1e1435, #0a0715);
+      color: #f0edff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+    .app { max-width: 1100px; margin: 0 auto; padding: 1.2rem 1.5rem 4rem; position: relative; }
+    .progress-wrap {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
+      background: rgba(255, 215, 0, 0.05); backdrop-filter: blur(8px);
+      padding: 0.6rem 1.2rem; border-radius: 60px;
+      border: 1px solid rgba(255, 215, 0, 0.15); margin-bottom: 2.5rem; flex-wrap: wrap;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+    }
+    .progress-label { font-weight: 600; font-size: 0.85rem; letter-spacing: 0.3px; color: #ffd966; }
+    .progress-dots { display: flex; gap: 0.6rem; align-items: center; flex: 1; justify-content: center; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 20px; background: #3a2a5c;
+      transition: 0.4s ease; border: 1px solid rgba(255, 215, 0, 0.1);
+    }
+    .dot.active { background: #ffb347; box-shadow: 0 0 20px #ffb347, 0 0 40px #ff8c00; width: 28px; border-color: #ffb347; }
+    .dot.done { background: #ff8c00; box-shadow: 0 0 15px #ff8c00; }
+    .step-name { font-size: 0.7rem; color: #ffd966; font-weight: 500; display: none; }
+    @media (min-width: 600px) { .step-name { display: inline-block; } }
+    .section { display: none; animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; margin-top: 1rem; }
+    .section.active { display: block; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(40px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    .glass {
+      background: rgba(255, 215, 0, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 215, 0, 0.08); border-radius: 2.5rem; padding: 2rem 2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 215, 0, 0.03);
+      transition: 0.2s; position: relative; overflow: hidden;
+    }
+    .glass::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.03), transparent 60%);
+      pointer-events: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ff8c00, #ffb347); border: none; color: #0f0b1a;
+      font-weight: 700; font-size: 1.1rem; padding: 0.9rem 2.2rem; border-radius: 60px;
+      cursor: pointer; transition: 0.25s ease; box-shadow: 0 6px 25px rgba(255, 140, 0, 0.4);
+      letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 0.5rem; position: relative; z-index: 2;
+    }
+    .btn-primary:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6); }
+    .welcome-title {
+      font-size: clamp(2.8rem, 10vw, 4.8rem); font-weight: 700;
+      background: linear-gradient(135deg, #ffd966, #ff8c00, #ffb347);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.1; text-shadow: 0 0 60px rgba(255, 140, 0, 0.2);
+    }
+    .floating-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%; background: radial-gradient(circle, #ffb347, #ff8c00);
+      opacity: 0.15; animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.15; } 90% { opacity: 0.15; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+    .quiz-option {
+      display: block; width: 100%; padding: 0.9rem 1.5rem; margin: 0.6rem 0;
+      background: rgba(255, 215, 0, 0.03); border: 1px solid rgba(255, 215, 0, 0.06);
+      border-radius: 40px; color: #f0e8ff; font-size: 1rem; text-align: left;
+      cursor: pointer; transition: 0.2s; position: relative; z-index: 2;
+    }
+    .quiz-option:hover { background: rgba(255, 140, 0, 0.15); border-color: #ff8c00; transform: translateX(5px); }
+    .quiz-option.selected { background: rgba(255, 140, 0, 0.2); border-color: #ffb347; box-shadow: 0 0 30px rgba(255, 140, 0, 0.15); }
+    .rating-slider { width: 100%; accent-color: #ff8c00; height: 8px; border-radius: 10px; margin: 1.5rem 0; background: linear-gradient(to right, #ff8c00, #ffb347); }
+    .rating-value { font-size: 3.5rem; font-weight: 700; background: linear-gradient(135deg, #ffd966, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .final-reveal { text-align: center; padding: 2.5rem 1rem; position: relative; }
+    .final-reveal .glow-ring {
+      position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+      background: radial-gradient(circle, rgba(255, 140, 0, 0.05), transparent 70%);
+      pointer-events: none; animation: pulseGlow 3s infinite;
+    }
+    @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+    .confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+
+    /* ===== PHOTO GALLERY ===== */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .photo-placeholder {
+      border-radius: 30px;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.6);
+      transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: rotate(var(--rot, 0deg));
+      background: #1a1528;
+      border: 2px solid rgba(255, 215, 0, 0.08);
+    }
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-placeholder:hover {
+      transform: scale(1.03) rotate(0deg);
+      border-color: #ff8c00;
+      box-shadow: 0 0 50px rgba(255, 140, 0, 0.2);
+    }
+    .photo-placeholder:nth-child(1) { --rot: -2.5deg; }
+    .photo-placeholder:nth-child(2) { --rot: 3.5deg; }
+    .photo-placeholder:nth-child(3) { --rot: -1.5deg; }
+    .photo-placeholder:nth-child(4) { --rot: 2deg; }
+    .photo-placeholder:nth-child(5) { --rot: -3deg; }
+    .photo-placeholder:nth-child(6) { --rot: 1.5deg; }
+
+    .friendship-quote {
+      font-size: 1.1rem; font-style: italic; color: #ffd966;
+      border-left: 4px solid #ff8c00; padding-left: 1.4rem;
+      margin: 2rem 0 1.5rem; background: rgba(255, 215, 0, 0.02);
+      border-radius: 0 20px 20px 0; padding: 1.2rem 1.8rem;
+      backdrop-filter: blur(4px); box-shadow: 0 0 30px rgba(255, 140, 0, 0.03);
+    }
+    .heartfelt-message {
+      background: rgba(255, 215, 0, 0.02); padding: 1.8rem 2rem;
+      border-radius: 40px; border: 1px solid rgba(255, 215, 0, 0.05);
+      line-height: 1.8; color: #f0e8ff;
+    }
+    .heartfelt-message p { margin-bottom: 0.8rem; }
+    .music-btn {
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(20, 15, 40, 0.8); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 215, 0, 0.1); border-radius: 60px;
+      padding: 0.5rem 1.2rem; color: #ffd966; font-size: 0.9rem;
+      z-index: 100; cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+      transition: 0.2s;
+    }
+    .music-btn:hover { border-color: #ff8c00; box-shadow: 0 0 30px rgba(255, 140, 0, 0.1); }
+    @media (max-width: 480px) {
+      .app { padding: 1rem 0.8rem; }
+      .glass { padding: 1.5rem 1rem; }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 800px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } }
+    .hidden { display: none !important; }
+    .mt-2 { margin-top: 1.8rem; }
+    .text-center { text-align: center; }
+    .badge-glow {
+      display: inline-block; padding: 0.2rem 1rem; border-radius: 40px;
+      background: rgba(255, 140, 0, 0.1); border: 1px solid rgba(255, 140, 0, 0.2);
+      font-size: 0.7rem; color: #ffb347; letter-spacing: 0.5px;
+    }
+    .signature { font-size: 0.9rem; color: #ffb347; opacity: 0.7; margin-top: 1rem; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div class="floating-particles" id="particles"></div>
+
+<main class="app" id="app">
+
+  <div class="progress-wrap">
+    <span class="progress-label">🔥 journey</span>
+    <div class="progress-dots" id="progressDots">
+      <span class="dot active" data-step="0"></span>
+      <span class="dot" data-step="1"></span>
+      <span class="dot" data-step="2"></span>
+      <span class="dot" data-step="3"></span>
+    </div>
+    <span class="step-name" id="stepName">Welcome</span>
+  </div>
+
+  <!-- WELCOME -->
+  <section class="section active" id="screenWelcome">
+    <div class="glass text-center" style="padding: 3rem 1.5rem;">
+      <span class="badge-glow">🎯 from Raushan</span>
+      <h1 class="welcome-title">Hey Mandeep 👀</h1>
+      <p style="font-size: 1.2rem; color: #ffd966; margin: 1.5rem 0 1rem;">I've put together something special just for you, bro.</p>
+      <p style="font-size: 1rem; color: #ccb8ff; margin-bottom: 2rem;">Took me a while, but it's worth it. 😏</p>
+      <button class="btn-primary" id="startJourneyBtn">Let's Go →</button>
+      <div class="signature">— Raushan</div>
+    </div>
+    <div class="friendship-quote">"Some friendships are built on years. Others on countless little moments."</div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="section" id="screenQuiz">
+    <div class="glass">
+      <h2 style="font-size: 1.8rem; color: #ffd966;">How Well Do You Know Our Friendship? 😏</h2>
+      <p style="color: #ccb8ff; margin-bottom: 0.5rem;">— Raushan made this quiz, so don't mess it up 😂</p>
+      <div id="quizContainer"></div>
+      <div id="quizResult" class="hidden text-center mt-2">
+        <p style="font-size: 1.4rem; font-weight: 500; color: #ffb347;">Okay… you know our friendship pretty well 😎</p>
+        <button class="btn-primary mt-2" id="quizNextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATING -->
+  <section class="section" id="screenRating">
+    <div class="glass text-center">
+      <h2 style="font-size: 1.8rem; color: #ffd966;">Okay Mandeep… be honest 👀</h2>
+      <p style="font-size: 1.1rem; margin-top: 0.5rem; color: #ccb8ff;">Raushan's asking — rate this friendship from 1–10</p>
+      <input type="range" min="1" max="10" value="5" class="rating-slider" id="ratingSlider" />
+      <div><span class="rating-value" id="ratingDisplay">5</span></div>
+      <div id="ratingFeedback" style="min-height: 3rem; font-size: 1.2rem; margin: 0.5rem 0; color: #ffd966;">Hmm… acceptable 😂</div>
+      <button class="btn-primary mt-2" id="ratingNextBtn" disabled>Unlock Final 🎁</button>
+    </div>
+  </section>
+
+  <!-- FINAL REVEAL -->
+  <section class="section" id="screenFinalReveal">
+    <div class="glass text-center final-reveal">
+      <div class="glow-ring"></div>
+      <h2 style="font-size: 2.4rem; color: #ffd966;">You've completed the friendship test…</h2>
+      <p style="font-size: 1.3rem; color: #ffb347;">But there is one final thing I made for you…</p>
+      <button class="btn-primary" id="finalSurpriseBtn" style="font-size: 1.5rem; padding: 1.2rem 3rem; margin-top: 2rem;">Open Your Surprise 🎁</button>
+      <div class="signature" style="margin-top: 2rem;">— Raushan</div>
+    </div>
+  </section>
+
+  <!-- ===== BIRTHDAY PAGE WITH PHOTOS ===== -->
+  <section class="section" id="screenBirthday">
+    <div class="glass" style="padding: 2rem;">
+      <h1 style="font-size: clamp(2.8rem, 8vw, 4.4rem); background: linear-gradient(135deg,#ffd966,#ff8c00,#ffb347); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Happy Birthday, Mandeep! 🎂❤️</h1>
+      <p style="font-size: 1.3rem; color: #ffb347;">Another year older, but thankfully still the same idiot. 😂</p>
+      
+      <!-- ===== PHOTO GALLERY ===== -->
+      <!-- 
+        📸 Your photos are in the "photos" folder with these names:
+        img1.jpeg, img2.jpeg, img3.jpeg, img4.jpeg, img5.jpeg, img6.jpeg
+      -->
+      <div class="photo-grid">
+        <!-- PHOTO 1: Mandeep and Raushan -->
+        <div class="photo-placeholder">
+          <img src="photos/img1.jpeg" alt="Mandeep and Raushan">
+        </div>
+        <!-- PHOTO 2: Fun moment -->
+        <div class="photo-placeholder">
+          <img src="photos/img2.jpg" alt="Fun moment">
+        </div>
+        <!-- PHOTO 3: Good times -->
+        <div class="photo-placeholder">
+          <img src="photos/img3.jpeg" alt="Good times">
+        </div>
+        <!-- PHOTO 4: Another memory -->
+        <div class="photo-placeholder">
+          <img src="photos/img4.jpeg" alt="Another memory",>
+        </div>
+        <!-- PHOTO 5: Crazy moment -->
+        <div class="photo-placeholder">
+          <img src="photos/img5.jpeg" alt="Crazy moment">
+        </div>
+        <!-- PHOTO 6: Best friends -->
+        <div class="photo-placeholder">
+          <img src="photos/img6.jpg" alt="Best friends">
+        </div>
+      </div>
+
+      <!-- HEARTFELT MESSAGE -->
+      <div class="heartfelt-message">
+        <p>Life gives us a lot of people, but only a few become the kind of friends with whom even the most random conversations become memories.</p>
+        <p>I'm genuinely grateful for all the laughs, stupid conversations, arguments, roasting sessions and those random moments that somehow became special.</p>
+        <p>I hope this year brings you happiness, success, peace and a lot of reasons to smile.</p>
+        <p>Stay the same crazy person you are.</p>
+        <p><strong style="color: #ffb347;">Happy Birthday, Mandeep! ❤️🎂</strong><br>Here's to more memories, more laughter and many more years of this stupid friendship. 🫂</p>
+        <div class="signature" style="text-align: right; margin-top: 1.5rem;">— Your bro, Raushan</div>
+      </div>
+      <div class="friendship-quote">"Life is better when you have someone to laugh at the stupid things with."</div>
+    </div>
+  </section>
+</main>
+
+<div class="music-btn" id="musicToggle">🔊 Music On/Off</div>
+<canvas id="confettiCanvas" class="confetti-canvas" style="pointer-events: none;"></canvas>
+
+<script>
+  (function(){
+    "use strict";
+
+    const state = {
+      currentStep: 0,
+      quizDone: false,
+      ratingDone: false,
+    };
+
+    const sections = document.querySelectorAll('.section');
+    const dots = document.querySelectorAll('.dot');
+    const stepName = document.getElementById('stepName');
+    const startBtn = document.getElementById('startJourneyBtn');
+    const quizNextBtn = document.getElementById('quizNextBtn');
+    const ratingNextBtn = document.getElementById('ratingNextBtn');
+    const finalSurpriseBtn = document.getElementById('finalSurpriseBtn');
+    const ratingSlider = document.getElementById('ratingSlider');
+    const ratingDisplay = document.getElementById('ratingDisplay');
+    const ratingFeedback = document.getElementById('ratingFeedback');
+    const quizContainer = document.getElementById('quizContainer');
+    const quizResult = document.getElementById('quizResult');
+
+    // Particles
+    (function initParticles() {
+      const container = document.getElementById('particles');
+      for (let i=0; i<70; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 3 + Math.random() * 20;
+        p.style.width = size+'px'; p.style.height = size+'px';
+        p.style.left = Math.random()*100+'%';
+        p.style.top = '-10%';
+        p.style.animationDuration = 15 + Math.random()*30 + 's';
+        p.style.animationDelay = Math.random()*25 + 's';
+        p.style.opacity = 0.05 + Math.random()*0.2;
+        p.style.background = `radial-gradient(circle, #ffb347, #ff8c00)`;
+        container.appendChild(p);
+      }
+    })();
+
+    function updateProgress(step) {
+      state.currentStep = step;
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active','done');
+        if (i === step) dot.classList.add('active');
+        else if (i < step) dot.classList.add('done');
+      });
+      const labels = ['Welcome','Quiz','Rating','Final','Birthday'];
+      stepName.textContent = labels[step] || '';
+    }
+
+    function showSection(index) {
+      sections.forEach((sec, i) => {
+        sec.classList.toggle('active', i === index);
+      });
+      updateProgress(index);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Quiz
+    const quizQuestions = [
+      { q: 'Who is more likely to start a stupid argument for absolutely no reason?', options: ['Me', 'Mandeep', 'Both 😂'] },
+      { q: 'Who is more likely to say "5 minutes" and disappear for 2 hours?', options: ['Me', 'Mandeep', 'Both'] },
+      { q: 'Our friendship can best be described as…', options: ['Peaceful and normal', '50% roasting, 50% chaos', 'Somehow still surviving 😂'] }
+    ];
+    let quizAnswers = [];
+
+    function renderQuiz() {
+      quizContainer.innerHTML = '';
+      quizAnswers = [];
+      quizQuestions.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.style.marginTop = '1.5rem';
+        div.innerHTML = `<p style="font-weight:500; color: #ffd966;">${q.q}</p>`;
+        q.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'quiz-option';
+          btn.textContent = opt;
+          btn.dataset.idx = idx;
+          btn.dataset.opt = opt;
+          btn.addEventListener('click', function(e) {
+            const parent = this.closest('div');
+            parent.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            quizAnswers[idx] = opt;
+            if (quizAnswers.length === quizQuestions.length && quizAnswers.every(a => a !== undefined)) {
+              quizResult.classList.remove('hidden');
+            }
+          });
+          div.appendChild(btn);
+        });
+        quizContainer.appendChild(div);
+      });
+    }
+    renderQuiz();
+
+    // Rating
+    ratingSlider.addEventListener('input', function() {
+      const val = parseInt(this.value);
+      ratingDisplay.textContent = val;
+      let msg = '';
+      if (val <= 3) msg = 'Bro… we need to talk 💀';
+      else if (val <= 6) msg = 'Hmm… acceptable 😂';
+      else if (val <= 8) msg = "Okay, we're doing pretty well 😎";
+      else if (val === 9) msg = 'Almost perfect!';
+      else if (val === 10) msg = 'Obviously. Correct answer. 😂❤️';
+      ratingFeedback.textContent = msg;
+      state.ratingDone = (val >= 7);
+      ratingNextBtn.disabled = !state.ratingDone;
+      ratingNextBtn.style.opacity = state.ratingDone ? 1 : 0.5;
+    });
+    ratingSlider.dispatchEvent(new Event('input'));
+
+    // Confetti
+    function fireConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const pieces = [];
+      const colors = ['#ff8c00', '#ffb347', '#ffd966', '#ff6b00', '#ffaa33'];
+      for (let i=0; i<200; i++) {
+        pieces.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height - canvas.height,
+          w: 6+Math.random()*10,
+          h: 4+Math.random()*8,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          vx: (Math.random()-0.5)*3,
+          vy: 2+Math.random()*5,
+          rot: Math.random()*360,
+          rv: (Math.random()-0.5)*6,
+        });
+      }
+      let frame = 0;
+      function draw() {
+        if (frame > 250) { ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        pieces.forEach(p => {
+          p.x += p.vx + Math.sin(frame*0.03 + p.y)*0.3;
+          p.y += p.vy;
+          p.rot += p.rv;
+          if (p.y > canvas.height) { p.y = -20; p.x = Math.random()*canvas.width; }
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot * Math.PI/180);
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 8;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        });
+        frame++;
+        requestAnimationFrame(draw);
+      }
+      draw();
+      setTimeout(() => { ctx.clearRect(0,0,canvas.width,canvas.height); }, 4500);
+    }
+
+    // Navigation
+    startBtn.addEventListener('click', () => { showSection(1); });
+
+    quizNextBtn.addEventListener('click', () => {
+      if (quizAnswers.length === quizQuestions.length && quizAnswers.every(a => a !== undefined)) {
+        state.quizDone = true;
+        showSection(2);
+      } else {
+        alert('Bro, answer all questions first! 😤');
+      }
+    });
+
+    ratingNextBtn.addEventListener('click', () => {
+      if (state.ratingDone) showSection(3);
+    });
+
+    finalSurpriseBtn.addEventListener('click', () => {
+      fireConfetti();
+      setTimeout(fireConfetti, 400);
+      setTimeout(fireConfetti, 1000);
+      showSection(4);
+      setTimeout(fireConfetti, 1600);
+    });
+
+    document.getElementById('musicToggle').addEventListener('click', function() {
+      this.textContent = this.textContent.includes('🔊') ? '🔇 Music Off' : '🔊 Music On';
+    });
+
+    updateProgress(0);
+  })();
+</script>
+</body>
+</html>
